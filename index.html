@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#386a20">
+<title>Ezmanw's Lair</title>
+<style>
+:root{
+  --primary:#386a20;--on-primary:#fff;
+  --primary-container:#b7f397;--on-primary-container:#0b2000;
+  --secondary-container:#d7e8cd;--on-secondary-container:#131f0d;
+  --surface:#f8fbf1;--on-surface:#191d16;--on-surface-variant:#43483e;
+  --surface-c:#eceee4;--surface-ch:#e6e9df;--outline:#73796d;--outline-v:#c3c8bb;
+  --scrim:rgba(0,0,0,.32);
+}
+@media (prefers-color-scheme:dark){:root{
+  --primary:#9cd67d;--on-primary:#0f3900;
+  --primary-container:#205107;--on-primary-container:#b7f397;
+  --secondary-container:#3b4b33;--on-secondary-container:#d7e8cd;
+  --surface:#11140f;--on-surface:#e1e4da;--on-surface-variant:#c3c8bb;
+  --surface-c:#1d211b;--surface-ch:#272b25;--outline:#8d9387;--outline-v:#43483e;
+}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--surface);color:var(--on-surface);font:400 16px/1.5 Roboto,system-ui,-apple-system,"Segoe UI",sans-serif}
+header{padding:48px 24px 8px;max-width:1040px;margin:auto}
+h1{font-size:2.6rem;line-height:1.15;font-weight:400;margin:0 0 4px;letter-spacing:-.5px}
+header p{margin:0;color:var(--on-surface-variant)}
+.bar{max-width:1040px;margin:24px auto 0;padding:0 24px;display:flex;gap:12px;align-items:center}
+.search{flex:1;display:flex;align-items:center;gap:12px;background:var(--surface-ch);border-radius:28px;padding:0 20px;height:56px;color:var(--on-surface-variant)}
+.search input{flex:1;border:0;background:none;outline:0;font:inherit;color:var(--on-surface)}
+.icon-btn{width:56px;height:56px;border-radius:50%;border:0;background:var(--surface-ch);color:var(--on-surface-variant);cursor:pointer;display:grid;place-items:center}
+main{max-width:1040px;margin:auto;padding:24px;display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
+.card{background:var(--surface-c);border-radius:24px;padding:20px;display:flex;flex-direction:column;gap:12px;transition:background .2s,transform .2s;position:relative}
+.card:hover{background:var(--surface-ch);transform:translateY(-2px)}
+.badge{width:48px;height:48px;border-radius:16px;background:var(--primary-container);color:var(--on-primary-container);display:grid;place-items:center;font-size:20px;font-weight:500;text-transform:uppercase}
+.card h2{margin:0;font-size:1.15rem;font-weight:500;overflow-wrap:anywhere}
+.meta{font-size:.8rem;color:var(--on-surface-variant);margin-top:-8px}
+.actions{display:flex;gap:8px;margin-top:auto}
+.btn{height:40px;padding:0 20px;border-radius:20px;border:0;font:500 .875rem inherit;font-family:inherit;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;transition:filter .15s,box-shadow .15s}
+.btn:hover{filter:brightness(.95);box-shadow:0 1px 3px rgba(0,0,0,.25)}
+.btn:active{filter:brightness(.88)}
+.filled{background:var(--primary);color:var(--on-primary)}
+.tonal{background:var(--secondary-container);color:var(--on-secondary-container)}
+.text{background:none;color:var(--primary)}
+.empty{grid-column:1/-1;text-align:center;color:var(--on-surface-variant);padding:64px 0}
+#drop{position:fixed;inset:0;background:var(--scrim);display:none;place-items:center;z-index:5}
+#drop.on{display:grid}
+#drop div{background:var(--primary-container);color:var(--on-primary-container);padding:48px 64px;border-radius:28px;font-size:1.4rem;border:3px dashed var(--primary)}
+dialog{border:0;border-radius:28px;background:var(--surface-c);color:var(--on-surface);padding:24px;max-width:420px;width:calc(100% - 32px)}
+dialog::backdrop{background:var(--scrim)}
+dialog h3{margin:0 0 8px;font-weight:400;font-size:1.5rem}
+dialog p{font-size:.9rem;color:var(--on-surface-variant);margin:0 0 16px}
+label{display:block;font-size:.75rem;color:var(--primary);margin:12px 0 4px}
+dialog input{width:100%;height:48px;border-radius:12px;border:1px solid var(--outline);background:none;color:var(--on-surface);padding:0 14px;font:inherit}
+dialog input:focus{outline:2px solid var(--primary);border-color:transparent}
+.row{display:flex;justify-content:flex-end;gap:8px;margin-top:20px}
+#fab{position:fixed;right:24px;bottom:24px;height:56px;padding:0 24px 0 18px;border-radius:16px;border:0;background:var(--primary-container);color:var(--on-primary-container);font:500 1rem inherit;font-family:inherit;display:flex;gap:12px;align-items:center;cursor:pointer;box-shadow:0 3px 8px rgba(0,0,0,.25);transition:box-shadow .2s}
+#fab:hover{box-shadow:0 6px 14px rgba(0,0,0,.3)}
+#snack{position:fixed;left:50%;bottom:96px;transform:translate(-50%,20px);background:var(--on-surface);color:var(--surface);padding:12px 20px;border-radius:12px;opacity:0;pointer-events:none;transition:.25s;z-index:9}
+#snack.on{opacity:1;transform:translate(-50%,0)}
+@media(max-width:560px){h1{font-size:2rem}header{padding-top:32px}}
+</style>
+</head>
+<body>
+<header>
+  <h1>Ezmanw's Lair 🌿</h1>
+  <p>My HTML pages — open one, copy the link, share it.</p>
+</header>
+<div class="bar">
+  <label class="search" style="margin:0;font-size:1rem;color:inherit">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M15.5 14h-.79l-.28-.27A6.47 6.47 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"/></svg>
+    <input id="q" placeholder="Search pages" autocomplete="off">
+  </label>
+  <button class="icon-btn" id="cfg" title="Upload settings" aria-label="Settings">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M19.14 12.94c.04-.3.06-.61.06-.94s-.02-.64-.07-.94l2.03-1.58a.5.5 0 0 0 .12-.61l-1.92-3.32a.5.5 0 0 0-.59-.22l-2.39.96a7 7 0 0 0-1.62-.94l-.36-2.54a.48.48 0 0 0-.48-.41h-3.84a.48.48 0 0 0-.48.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96a.48.48 0 0 0-.59.22L2.74 8.87a.48.48 0 0 0 .12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58a.5.5 0 0 0-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32a.5.5 0 0 0-.12-.61zM12 15.6A3.6 3.6 0 1 1 12 8.4a3.6 3.6 0 0 1 0 7.2"/></svg>
+  </button>
+</div>
+<main id="grid"></main>
+
+<button id="fab"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6z"/></svg>Add page</button>
+<input type="file" id="file" accept=".html,.htm" multiple hidden>
+<div id="drop"><div>Drop HTML files to add them</div></div>
+<div id="snack"></div>
+
+<dialog id="dlg">
+  <h3>Upload settings</h3>
+  <p>To add pages from this site, paste a fine-grained GitHub token with <b>Contents: read &amp; write</b> on this repo. It's stored only in this browser. Without one, "Add page" opens GitHub's own upload screen.</p>
+  <label for="repo">Repository (owner/name)</label>
+  <input id="repo" placeholder="user/repo">
+  <label for="tok">Token</label>
+  <input id="tok" type="password" placeholder="github_pat_…">
+  <div class="row"><button class="btn text" id="cancel">Cancel</button><button class="btn filled" id="save">Save</button></div>
+</dialog>
+
+<script>
+const $=s=>document.querySelector(s);
+const grid=$('#grid'),snack=$('#snack');
+let pages=[];
+
+// Work out owner/repo from the github.io URL, unless overridden
+function guessRepo(){
+  const saved=localStorage.getItem('lair.repo'); if(saved) return saved;
+  const m=location.hostname.match(/^(.+)\.github\.io$/);
+  if(m){const r=location.pathname.split('/')[1]; return m[1]+'/'+(r||m[1]+'.github.io');}
+  return '';
+}
+function toast(t){snack.textContent=t;snack.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>snack.classList.remove('on'),2200)}
+const abs=f=>new URL(f,location.href.replace(/[^/]*$/,'')).href;
+const ago=d=>{if(!d)return'';const s=(Date.now()-new Date(d))/1000;
+  for(const[u,n]of[['y',31536e3],['mo',2592e3],['d',86400],['h',3600],['m',60]])if(s>=n)return Math.floor(s/n)+u+' ago';return'just now'};
+const kb=b=>b<1024?b+' B':(b/1024).toFixed(1)+' KB';
+const esc=s=>s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+function render(){
+  const q=$('#q').value.toLowerCase();
+  const list=pages.filter(p=>(p.title+p.file).toLowerCase().includes(q));
+  if(!list.length){grid.innerHTML='<div class="empty">'+(pages.length?'No matches':'No pages yet — drop an .html file here 🌱')+'</div>';return}
+  grid.innerHTML=list.map(p=>`<article class="card">
+    <div class="badge">${esc(p.title[0]||'?')}</div>
+    <h2>${esc(p.title)}</h2>
+    <div class="meta">${esc(p.file.replace(/^pages\//,''))} · ${kb(p.size)}${p.modified?' · '+ago(p.modified):''}</div>
+    <div class="actions">
+      <a class="btn filled" href="${esc(p.file)}" target="_blank" rel="noopener">Open</a>
+      <button class="btn tonal" data-copy="${esc(p.file)}">Copy link</button>
+    </div></article>`).join('');
+}
+
+async function load(){
+  try{
+    const r=await fetch('pages.json',{cache:'no-cache'});
+    if(!r.ok)throw 0; pages=await r.json();
+  }catch{
+    // no manifest (e.g. before first deploy): fall back to the GitHub API
+    const repo=guessRepo();
+    if(repo)try{
+      const r=await fetch(`https://api.github.com/repos/${repo}/contents/pages`);
+      pages=(await r.json()).filter(f=>/\.html?$/i.test(f.name)).map(f=>({file:'pages/'+f.name,title:f.name.replace(/\.html?$/i,'').replace(/[-_]/g,' '),size:f.size}));
+    }catch{}
+  }
+  render();
+}
+
+grid.addEventListener('click',async e=>{
+  const b=e.target.closest('[data-copy]'); if(!b)return;
+  const url=abs(b.dataset.copy);
+  if(navigator.share&&matchMedia('(pointer:coarse)').matches){try{await navigator.share({url});return}catch{}}
+  try{await navigator.clipboard.writeText(url);toast('Link copied')}catch{prompt('Copy link',url)}
+});
+$('#q').addEventListener('input',render);
+
+// ---- adding files ----
+const b64=buf=>{let s='';const a=new Uint8Array(buf);for(let i=0;i<a.length;i+=8192)s+=String.fromCharCode(...a.subarray(i,i+8192));return btoa(s)};
+async function upload(files){
+  const repo=guessRepo(),tok=localStorage.getItem('lair.tok');
+  files=[...files].filter(f=>/\.html?$/i.test(f.name));
+  if(!files.length)return toast('Only .html files');
+  if(!repo||!tok){
+    toast('No token set — opening GitHub upload');
+    const r=repo||prompt('Repo (owner/name)?'); if(r)window.open(`https://github.com/${r}/upload/main/pages`,'_blank');
+    return;
+  }
+  const H={Authorization:'Bearer '+tok,Accept:'application/vnd.github+json'};
+  for(const f of files){
+    const name=f.name.replace(/\s+/g,'-'),url=`https://api.github.com/repos/${repo}/contents/pages/${encodeURIComponent(name)}`;
+    let sha;const ex=await fetch(url,{headers:H});if(ex.ok)sha=(await ex.json()).sha;
+    const r=await fetch(url,{method:'PUT',headers:H,body:JSON.stringify({message:'Add '+name,content:b64(await f.arrayBuffer()),sha})});
+    if(!r.ok)return toast('Upload failed: '+r.status);
+  }
+  toast('Uploaded! Live in about a minute 🌿');
+}
+$('#fab').onclick=()=>$('#file').click();
+$('#file').onchange=e=>{upload(e.target.files);e.target.value=''};
+let depth=0;
+addEventListener('dragenter',e=>{e.preventDefault();depth++;$('#drop').classList.add('on')});
+addEventListener('dragleave',()=>{if(--depth<=0){depth=0;$('#drop').classList.remove('on')}});
+addEventListener('dragover',e=>e.preventDefault());
+addEventListener('drop',e=>{e.preventDefault();depth=0;$('#drop').classList.remove('on');upload(e.dataTransfer.files)});
+
+// ---- settings ----
+$('#cfg').onclick=()=>{$('#repo').value=guessRepo();$('#tok').value=localStorage.getItem('lair.tok')||'';$('#dlg').showModal()};
+$('#cancel').onclick=()=>$('#dlg').close();
+$('#save').onclick=()=>{localStorage.setItem('lair.repo',$('#repo').value.trim());localStorage.setItem('lair.tok',$('#tok').value.trim());$('#dlg').close();toast('Saved')};
+
+load();
+</script>
+</body>
+</html>
